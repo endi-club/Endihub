@@ -19,7 +19,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -38,7 +37,7 @@ jobs:
           artifact=$(find target -name 'endihub-*.jar' -print -quit)
           if [ -n "$artifact" ]; then
             echo "Moving artifact: $artifact to target/endihub.jar"
-            mv "$artifact" target/uploaded-artifact.jar
+            mv "$artifact" target/endihub.jar
           else
             echo "No matching artifact found"
             exit 1
