@@ -24,6 +24,19 @@ class Endihub : JavaPlugin(), Listener {
         event.player.teleport(event.player.world.spawnLocation)
     }
 
+    @EventHandler
+    fun onPlayerMoveEvent(event: PlayerMoveEvent) {
+        if (event.player.location.x > config.getInt("x") ||
+            event.player.location.x < -config.getInt("x") ||
+            event.player.location.y > config.getInt("y") ||
+            event.player.location.y < -config.getInt("y") ||
+            event.player.location.z > config.getInt("z") ||
+            event.player.location.z < -config.getInt("z")
+        ) {
+            event.player.teleport(event.player.world.spawnLocation)
+        }
+    }
+
     override fun onDisable() {
         // Plugin shutdown logic
     }
