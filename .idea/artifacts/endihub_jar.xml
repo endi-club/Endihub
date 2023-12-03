@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="endihub:jar">
+    <output-path>$USER_HOME$/Documents/plugins</output-path>
+    <root id="archive" name="endihub.jar">
+      <element id="module-output" name="endihub" />
+      <element id="library" level="project" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.0-Beta" />
+    </root>
+  </artifact>
+</component>

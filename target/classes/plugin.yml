@@ -1,0 +1,4 @@
+name: endihub
+version: '1.0-SNAPSHOT'
+main: club.endi.endihub.Endihub
+api-version: '1.20'
