@@ -30,19 +30,19 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: Find and Upload artifact
+      - name: Move artifact
         run: |
           artifact=$(find target -name 'endihub-*.jar' -print -quit)
           if [ -n "$artifact" ]; then
-            echo "Uploading artifact: $artifact"
-            echo "::set-output name=artifact_path::$artifact"
+            echo "Moving artifact: $artifact to target/endihub.jar"
+            mv "$artifact" target/uploaded-artifact.jar
           else
             echo "No matching artifact found"
             exit 1
           fi
         shell: bash
 
-      - name: Upload found artifact
+      - name: Upload moved artifact
         uses: actions/upload-artifact@v3
         with:
-          path: ${{ steps.find-artifact.outputs.artifact_path }}
+          path: target/endihub.jar
