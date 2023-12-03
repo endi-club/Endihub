@@ -8,6 +8,9 @@
 
 name: Java CI with Maven
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 on:
   push:
     branches: [ "main" ]
