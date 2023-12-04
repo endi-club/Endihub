@@ -1,5 +1,7 @@
 package club.endi.endihub
 
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
@@ -28,10 +30,14 @@ class Endihub : JavaPlugin(), Listener {
 
         event.player.inventory.clear()
 
-        val compassItem = Material.DIRT
-        event.player.inventory.setItem(2, ItemStack(compassItem, 1))
-        event.player.inventory.setItem(5, ItemStack(compassItem, 1))
-        event.player.inventory.setItem(8, ItemStack(compassItem, 1))
+        val compassItem = ItemStack(Material.DIRT, 1)
+        compassItem.lore()?.add(
+            Component.text("Oikea klikkaus: Avaa palvelimen valikko").color(NamedTextColor.GRAY)
+        )
+
+        event.player.inventory.setItem(1, compassItem)
+        event.player.inventory.setItem(4, compassItem)
+        event.player.inventory.setItem(7, compassItem)
     }
 
     @EventHandler
