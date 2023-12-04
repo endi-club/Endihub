@@ -35,7 +35,7 @@ class Endihub : JavaPlugin(), Listener {
         if (event.player.location.x > config.getInt("x") ||
             event.player.location.x < -config.getInt("x") ||
             event.player.location.y > config.getInt("maxy") ||
-            event.player.location.y < -config.getInt("miny") ||
+            event.player.location.y < config.getInt("miny") ||
             event.player.location.z > config.getInt("z") ||
             event.player.location.z < -config.getInt("z")
         ) {
