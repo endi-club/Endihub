@@ -6,7 +6,10 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockFormEvent
+import org.bukkit.event.block.BlockIgniteEvent
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
@@ -55,6 +58,27 @@ class Endihub : JavaPlugin(), Listener {
             event.player.fallDistance = 0F
             event.player.teleport(event.player.world.spawnLocation)
         }
+    }
+
+    // cancellers
+    @EventHandler
+    fun onBlockPlaceEvent(event: BlockPlaceEvent) {
+        event.isCancelled = !event.player.hasPermission("endihub.build")
+    }
+
+    @EventHandler
+    fun onBlockBreakEvent(event: BlockBreakEvent) {
+        event.isCancelled = !event.player.hasPermission("endihub.build")
+    }
+
+    @EventHandler
+    fun onBlockIgniteEvent(event: BlockIgniteEvent) {
+        event.isCancelled = false
+    }
+
+    @EventHandler
+    fun onSignChangeEvent(event: BlockPlaceEvent) {
+        event.isCancelled = !event.player.hasPermission("endihub.build")
     }
 
     override fun onDisable() {
