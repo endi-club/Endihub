@@ -31,9 +31,7 @@ class Endihub : JavaPlugin(), Listener {
         event.player.inventory.clear()
 
         val compassItem = ItemStack(Material.DIRT, 1)
-        compassItem.lore()?.add(
-            Component.text("Oikea klikkaus: Avaa palvelimen valikko").color(NamedTextColor.GRAY)
-        )
+        compassItem.lore(List(1) { Component.text("Vasen klikkaus: Avaa pelaajan valikko").color(NamedTextColor.GRAY) })
 
         event.player.inventory.setItem(1, compassItem)
         event.player.inventory.setItem(4, compassItem)
