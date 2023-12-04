@@ -39,6 +39,7 @@ class Endihub : JavaPlugin(), Listener {
             event.player.location.z > config.getInt("z") ||
             event.player.location.z < -config.getInt("z")
         ) {
+            event.player.fallDistance = 0F
             event.player.teleport(event.player.world.spawnLocation)
         }
     }
