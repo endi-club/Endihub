@@ -1,12 +1,14 @@
 package club.endi.endihub
 
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockFormEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 
 class Endihub : JavaPlugin(), Listener {
@@ -23,6 +25,13 @@ class Endihub : JavaPlugin(), Listener {
     @EventHandler
     fun onPlayerJoinEvent(event: PlayerJoinEvent) {
         event.player.teleport(event.player.world.spawnLocation)
+
+        event.player.inventory.clear()
+
+        val compassItem = Material.DIRT
+        event.player.inventory.setItem(2, ItemStack(compassItem, 1))
+        event.player.inventory.setItem(5, ItemStack(compassItem, 1))
+        event.player.inventory.setItem(8, ItemStack(compassItem, 1))
     }
 
     @EventHandler
