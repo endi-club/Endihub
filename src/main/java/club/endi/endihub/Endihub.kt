@@ -4,6 +4,7 @@ import org.bukkit.Location
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockFormEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.plugin.java.JavaPlugin
@@ -22,6 +23,11 @@ class Endihub : JavaPlugin(), Listener {
     @EventHandler
     fun onPlayerJoinEvent(event: PlayerJoinEvent) {
         event.player.teleport(event.player.world.spawnLocation)
+    }
+
+    @EventHandler
+    fun onEntityDamage(event: EntityDamageEvent) {
+        event.isCancelled = true
     }
 
     @EventHandler
