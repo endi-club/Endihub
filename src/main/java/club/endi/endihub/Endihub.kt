@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockFormEvent
 import org.bukkit.event.block.BlockIgniteEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.ProjectileLaunchEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
@@ -79,6 +80,25 @@ class Endihub : JavaPlugin(), Listener {
     @EventHandler
     fun onSignChangeEvent(event: BlockPlaceEvent) {
         event.isCancelled = !event.player.hasPermission("endihub.build")
+    }
+
+    @EventHandler
+    fun onPlayerDropItemEvent(event: BlockPlaceEvent) {
+        event.isCancelled = !event.player.hasPermission("endihub.build")
+    }
+
+    @EventHandler
+    fun onPlayerProjectileThrowEvent(event: ProjectileLaunchEvent) {
+        val shooter = event.entity.shooter
+        if (shooter is org.bukkit.entity.Player) {
+            if (event.entity.type == org.bukkit.entity.EntityType.ENDER_PEARL) {
+                event.entity.addPassenger(shooter)
+                shooter.sendMessage("§dWooosshh!")
+            }
+
+
+        }
+
     }
 
     override fun onDisable() {
