@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
+import sun.font.Decoration
 
 class Endihub : JavaPlugin(), Listener {
     override fun onEnable() {
@@ -39,12 +40,12 @@ class Endihub : JavaPlugin(), Listener {
         event.player.inventory.clear()
 
         val compassItem = ItemStack(Material.DIRT, 1)
-        compassItem.lore(List(1) { Text.md("&e**ᴘʀɪɢʜᴛᴄʟɪᴄᴋ**: Avaa pelaajan valikko").color(NamedTextColor.GRAY) })
+        compassItem.lore(List(1) { Text.md("&e**ᴘʀɪɢʜᴛᴄʟɪᴄᴋ**: Avaa pelaajan valikko")})
 
         event.player.inventory.setItem(1, compassItem)
 
-        val cosmeticsItem = ItemStack(Material.CHEST, 1)
-        cosmeticsItem.lore(List(1) { Component.text("&e**ᴘʀɪɢʜᴛᴄʟɪᴄᴋ**: Avaa kosmeettikka valikko").color(NamedTextColor.GRAY) })
+        val cosmeticsItem = ItemStack(Material.ENDER_CHEST, 1)
+        cosmeticsItem.lore(List(1) { Text.md("&e**ᴘʀɪɢʜᴛᴄʟɪᴄᴋ**: Avaa kosmeettikka valikko")})
 
         event.player.inventory.setItem(4, cosmeticsItem)
 
@@ -104,8 +105,8 @@ class Endihub : JavaPlugin(), Listener {
     // rightclick handler
     @EventHandler
     fun onPlayerInteractEvent(event: PlayerInteractEvent) {
-        if (event.item?.type == Material.CHEST) {
-            event.player.performCommand("kosmeettikka")
+        if (event.item?.type == Material.ENDER_CHEST) {
+            event.player.performCommand("kosmeetiikka")
         }
     }
 

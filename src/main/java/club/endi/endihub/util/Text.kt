@@ -2,6 +2,8 @@ package club.endi.endihub.util
 
 import de.themoep.minedown.adventure.MineDown
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextDecoration
+import net.kyori.adventure.text.format.TextDecorationAndState
 
 val colors = mapOf(
     "&(primary-1)" to "&#913AFF&",
@@ -31,7 +33,7 @@ class Text {
             return output
         }
         fun md(input: String): Component {
-            return MineDown(parser(input)).toComponent()
+            return MineDown(parser(input)).toComponent().decorationIfAbsent(TextDecorationAndState(TextDecoration.ITALIC, false))
         }
 
         fun mdUntrusted(input: String, untrustedString: String): Component {
