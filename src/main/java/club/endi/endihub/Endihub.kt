@@ -13,8 +13,14 @@ import org.bukkit.event.block.BlockFormEvent
 import org.bukkit.event.block.BlockIgniteEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageEvent
+<<<<<<< HEAD
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
+=======
+import org.bukkit.event.entity.ProjectileLaunchEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerMoveEvent
+>>>>>>> main
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -112,6 +118,23 @@ class Endihub : JavaPlugin(), Listener {
         if (event.inventory.holder is Player) {
             event.isCancelled = true
         }
+    }
+
+    @EventHandler
+    fun onPlayerDropItemEvent(event: BlockPlaceEvent) {
+        event.isCancelled = !event.player.hasPermission("endihub.build")
+    }
+
+    @EventHandler
+    fun onPlayerProjectileThrowEvent(event: ProjectileLaunchEvent) {
+        val shooter = event.entity.shooter
+        if (shooter is org.bukkit.entity.Player) {
+            if (event.entity.type == org.bukkit.entity.EntityType.ENDER_PEARL) {
+                event.entity.addPassenger(shooter)
+                shooter.sendMessage("§dWooosshh!")
+            }
+        }
+
     }
 
     override fun onDisable() {
