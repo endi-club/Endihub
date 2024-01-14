@@ -13,14 +13,11 @@ import org.bukkit.event.block.BlockFormEvent
 import org.bukkit.event.block.BlockIgniteEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageEvent
-<<<<<<< HEAD
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
-=======
 import org.bukkit.event.entity.ProjectileLaunchEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
->>>>>>> main
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 
