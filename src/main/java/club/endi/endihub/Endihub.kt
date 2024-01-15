@@ -114,7 +114,7 @@ class Endihub : JavaPlugin(), Listener {
     @EventHandler
     fun onInventoryClickEvent(event: InventoryClickEvent) {
         if (event.inventory.holder is Player) {
-            event.isCancelled = true
+            event.isCancelled = !event.player.hasPermission("endihub.build")
         }
     }
 
