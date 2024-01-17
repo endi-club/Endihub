@@ -38,7 +38,7 @@ class Endihub : JavaPlugin(), Listener {
             sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.LEVITATION, 1000000, 7, false, false, false))
             sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.DARKNESS, 1000000, 255, false, false, false))
             sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY, 1000000, 255, false, false, false))
-            
+
             server.scheduler.scheduleSyncDelayedTask(this, {
                 try {
                     val b: ByteArrayOutputStream = ByteArrayOutputStream()
@@ -85,8 +85,8 @@ class Endihub : JavaPlugin(), Listener {
         event.player.gameMode = org.bukkit.GameMode.ADVENTURE
 
         val compassItem = ItemStack(Material.DIRT, 1)
-        compassItem.lore(List(1) { Text.md("&e**ᴘʀɪɢʜᴛᴄʟɪᴄᴋ**: Avaa pelaajan valikko")})
-
+        compassItem.lore(List(1) { Text.md("&7Testaa ja nauti!")})
+        compassItem.asQuantity(99)
         event.player.inventory.setItem(1, compassItem)
 
         val cosmeticsItem = ItemStack(Material.ENDER_CHEST, 1)
@@ -151,7 +151,7 @@ class Endihub : JavaPlugin(), Listener {
     @EventHandler
     fun onPlayerInteractEvent(event: PlayerInteractEvent) {
         if (event.item?.type == Material.ENDER_CHEST) {
-            event.player.performCommand("kosmeetiikka")
+            event.player.performCommand("kosmetiikka")
         }
     }
 
@@ -173,6 +173,7 @@ class Endihub : JavaPlugin(), Listener {
         val shooter = event.entity.shooter
         if (shooter is org.bukkit.entity.Player) {
             if (event.entity.type == org.bukkit.entity.EntityType.ENDER_PEARL) {
+                shooter.inventory.setItemInMainHand(shooter.inventory.itemInMainHand.asQuantity(99))
                 event.entity.addPassenger(shooter)
                 shooter.sendMessage("§dWooosshh!")
             }
