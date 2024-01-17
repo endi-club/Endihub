@@ -34,29 +34,11 @@ class Endihub : JavaPlugin(), Listener {
                 return@setExecutor true
             }
 
-            // get all blocks in 200 block radius
-            val blocks = mutableListOf<Location>()
+            // give the player levitation effect
+            sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.LEVITATION, 1000000, 255, false, false, false))
+            sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.BLINDNESS, 1000000, 255, false, false, false))
 
-            for (x in -200..200) {
-                for (y in -200..200) {
-                    for (z in -200..200) {
-                        blocks.add(Location(sender.world, x.toDouble(), y.toDouble(), z.toDouble()))
-                    }
-                }
-            }
-
-            for (block in blocks) {
-                if (block.block.type == Material.AIR) continue
-                // to the player, send the block as air
-                sender.sendBlockChange(block, Material.AIR.createBlockData())
-                // to the player, make a falling block at the block's location
-                val fallingBlock = sender.world.spawnFallingBlock(block, block.block.blockData)
-                fallingBlock.isVisibleByDefault = false
-                sender.showEntity(this, fallingBlock)
-            }
-
-            // wait 2 seconds (using scheduler)
-            server.scheduler.runTaskLater(this, Runnable {
+            server.scheduler.scheduleSyncDelayedTask(this, {
                 try {
                     val b: ByteArrayOutputStream = ByteArrayOutputStream()
                     val out = DataOutputStream(b)
@@ -66,13 +48,14 @@ class Endihub : JavaPlugin(), Listener {
                     b.close()
                     out.close()
 
-                    server.scheduler.runTaskLater(this, Runnable {
-                    }, 20L)
-
                 } catch (e: Exception) {
                     sender.sendMessage(Text.pre("&cJotain meni pieleen! Sinua ei siirretty survivaliin."))
+                    sender.removePotionEffect(org.bukkit.potion.PotionEffectType.LEVITATION)
+                    sender.removePotionEffect(org.bukkit.potion.PotionEffectType.BLINDNESS)
+
+                    sender.teleport(sender.world.spawnLocation)
                 }
-            }, 40L)
+            }, 20L)
 
             true
         }
@@ -88,6 +71,16 @@ class Endihub : JavaPlugin(), Listener {
         event.player.teleport(event.player.world.spawnLocation)
 
         event.player.inventory.clear()
+
+        // remove the player's effects
+        event.player.activePotionEffects.forEach { effect ->
+            event.player.removePotionEffect(effect.type)
+        }
+
+        // foodheal the player
+        event.player.foodLevel = 20
+
+        event.player.gameMode = org.bukkit.GameMode.ADVENTURE
 
         val compassItem = ItemStack(Material.DIRT, 1)
         compassItem.lore(List(1) { Text.md("&e**ᴘʀɪɢʜᴛᴄʟɪᴄᴋ**: Avaa pelaajan valikko")})
