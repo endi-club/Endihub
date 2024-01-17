@@ -37,7 +37,8 @@ class Endihub : JavaPlugin(), Listener {
             // give the player levitation effect
             sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.LEVITATION, 1000000, 7, false, false, false))
             sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.DARKNESS, 1000000, 255, false, false, false))
-
+            sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY, 1000000, 255, false, false, false))
+            
             server.scheduler.scheduleSyncDelayedTask(this, {
                 try {
                     val b: ByteArrayOutputStream = ByteArrayOutputStream()
@@ -52,6 +53,7 @@ class Endihub : JavaPlugin(), Listener {
                     sender.sendMessage(Text.pre("&cJotain meni pieleen! Sinua ei siirretty survivaliin."))
                     sender.removePotionEffect(org.bukkit.potion.PotionEffectType.LEVITATION)
                     sender.removePotionEffect(org.bukkit.potion.PotionEffectType.DARKNESS)
+                    sender.removePotionEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY)
 
                     sender.teleport(sender.world.spawnLocation)
                 }
