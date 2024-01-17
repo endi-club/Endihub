@@ -84,14 +84,16 @@ class Endihub : JavaPlugin(), Listener {
 
         event.player.gameMode = org.bukkit.GameMode.ADVENTURE
 
-        val compassItem = ItemStack(Material.DIRT, 1)
+        val compassItem = ItemStack(Material.ENDER_PEARL, 1)
         compassItem.lore(List(1) { Text.md("&7Testaa ja nauti!")})
         compassItem.asQuantity(99)
+        compassItem.itemMeta.displayName(Text.md("&(primary-1)Ender Pearl"))
+
         event.player.inventory.setItem(1, compassItem)
 
         val cosmeticsItem = ItemStack(Material.ENDER_CHEST, 1)
         cosmeticsItem.lore(List(1) { Text.md("&e**ᴘʀɪɢʜᴛᴄʟɪᴄᴋ**: Avaa kosmeettikka valikko")})
-
+        cosmeticsItem.itemMeta.displayName(Text.md("&(primary-1)Kosmeettikka"))
         event.player.inventory.setItem(4, cosmeticsItem)
 
         event.player.inventory.setItem(7, compassItem)
