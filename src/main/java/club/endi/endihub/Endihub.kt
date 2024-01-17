@@ -86,7 +86,7 @@ class Endihub : JavaPlugin(), Listener {
 
         val compassItem = ItemStack(Material.ENDER_PEARL, 1)
         compassItem.lore(List(1) { Text.md("&7Testaa ja nauti!")})
-        compassItem.asQuantity(99)
+        compassItem.amount = 99
         compassItem.itemMeta.displayName(Text.md("&(primary-1)Ender Pearl"))
 
         event.player.inventory.setItem(1, compassItem)
