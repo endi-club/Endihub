@@ -33,7 +33,7 @@ class Text {
             return output
         }
         fun md(input: String): Component {
-            return MineDown(parser(input)).toComponent().decorationIfAbsent(TextDecorationAndState(TextDecoration.ITALIC, false))
+            return MineDown(parser(input)).toComponent()
         }
 
         fun mdUntrusted(input: String, untrustedString: String): Component {

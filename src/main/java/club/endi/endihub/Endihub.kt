@@ -1,10 +1,9 @@
 package club.endi.endihub
 
 import club.endi.endihub.util.Text
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.entity.FallingBlock
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -13,19 +12,70 @@ import org.bukkit.event.block.BlockFormEvent
 import org.bukkit.event.block.BlockIgniteEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.ProjectileLaunchEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
-import org.bukkit.event.entity.ProjectileLaunchEvent
-import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
-import sun.font.Decoration
+import java.io.ByteArrayOutputStream
+import java.io.DataOutputStream
+
 
 class Endihub : JavaPlugin(), Listener {
     override fun onEnable() {
         saveDefaultConfig()
         server.pluginManager.registerEvents(this, this)
+
+        this.server.messenger.registerOutgoingPluginChannel(this, "BungeeCord");
+
+        getCommand("survival")?.setExecutor { sender, command, label, args ->
+            if (sender !is Player) {
+                sender.sendMessage(Text.pre("&cVain pelaajat voivat käyttää tätä komentoa!"))
+                return@setExecutor true
+            }
+
+            // get all blocks in 200 block radius
+            val blocks = mutableListOf<Location>()
+
+            for (x in -200..200) {
+                for (y in -200..200) {
+                    for (z in -200..200) {
+                        blocks.add(Location(sender.world, x.toDouble(), y.toDouble(), z.toDouble()))
+                    }
+                }
+            }
+
+            for (block in blocks) {
+                if (block.block.type == Material.AIR) continue
+                // to the player, send the block as air
+                sender.sendBlockChange(block, Material.AIR.createBlockData())
+                // to the player, make a falling block at the block's location
+                val fallingBlock = sender.world.spawnFallingBlock(block, block.block.blockData)
+                fallingBlock.isVisibleByDefault = false
+                sender.showEntity(this, fallingBlock)
+            }
+
+            // wait 2 seconds (using scheduler)
+            server.scheduler.runTaskLater(this, Runnable {
+                try {
+                    val b: ByteArrayOutputStream = ByteArrayOutputStream()
+                    val out = DataOutputStream(b)
+                    out.writeUTF("Connect")
+                    out.writeUTF("survival")
+                    sender.sendPluginMessage(this, "BungeeCord", b.toByteArray())
+                    b.close()
+                    out.close()
+
+                    server.scheduler.runTaskLater(this, Runnable {
+                    }, 20L)
+
+                } catch (e: Exception) {
+                    sender.sendMessage(Text.pre("&cJotain meni pieleen! Sinua ei siirretty survivaliin."))
+                }
+            }, 40L)
+
+            true
+        }
     }
 
     @EventHandler
@@ -114,7 +164,7 @@ class Endihub : JavaPlugin(), Listener {
     @EventHandler
     fun onInventoryClickEvent(event: InventoryClickEvent) {
         if (event.inventory.holder is Player) {
-            event.isCancelled = !event.player.hasPermission("endihub.build")
+            event.isCancelled = !(event.inventory.holder as Player).hasPermission("endihub.build")
         }
     }
 
