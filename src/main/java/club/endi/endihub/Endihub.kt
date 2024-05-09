@@ -1,9 +1,10 @@
 package club.endi.endihub
 
 import club.endi.endihub.util.Text
-import org.bukkit.Location
+import io.papermc.paper.event.entity.EntityMoveEvent
+import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.entity.FallingBlock
+import org.bukkit.entity.EnderPearl
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -17,11 +18,33 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
+import org.spigotmc.event.entity.EntityDismountEvent
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 
+fun sendActionbar(player: Player, bitcount: Int) {
+    // &#4e5c24& <shift:-1>ꑀ<shift:-1>ꑀ<shift:-6>0<shift:-1>ꑀ<shift:-1>ꑀ<shift:-10>ꐻꑀ
+
+    val neg1 = "ꐫ"
+    val neg6 = "ꐬꐭꐫ"
+    val neg10 = "ꐬꐮꐫ"
+    val bg = "ꑀ"
+    var actionbar = "&#4e5c24&$neg1$bg"
+    val num = bitcount.toString()
+
+    for (c in num) {
+        actionbar += "$bg$neg6$c"
+    }
+
+    actionbar += "$bg$neg10"
+    actionbar += "ꐻ"
+    actionbar += bg
+
+    player.sendActionBar(Text.md(actionbar))
+}
 
 class Endihub : JavaPlugin(), Listener {
+    val playerPearls = mutableMapOf<Player, EnderPearl>()
     override fun onEnable() {
         saveDefaultConfig()
         server.pluginManager.registerEvents(this, this)
@@ -35,9 +58,36 @@ class Endihub : JavaPlugin(), Listener {
             }
 
             // give the player levitation effect
-            sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.LEVITATION, 1000000, 7, false, false, false))
-            sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.DARKNESS, 1000000, 255, false, false, false))
-            sender.addPotionEffect(org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY, 1000000, 255, false, false, false))
+            sender.addPotionEffect(
+                org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.LEVITATION,
+                    1000000,
+                    7,
+                    false,
+                    false,
+                    false
+                )
+            )
+            sender.addPotionEffect(
+                org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.DARKNESS,
+                    1000000,
+                    255,
+                    false,
+                    false,
+                    false
+                )
+            )
+            sender.addPotionEffect(
+                org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.INVISIBILITY,
+                    1000000,
+                    255,
+                    false,
+                    false,
+                    false
+                )
+            )
 
             server.scheduler.scheduleSyncDelayedTask(this, {
                 try {
@@ -58,6 +108,29 @@ class Endihub : JavaPlugin(), Listener {
                     sender.teleport(sender.world.spawnLocation)
                 }
             }, 20L)
+
+            true
+        }
+
+        getCommand("acbar")?.setExecutor { sender, command, label, args ->
+            if (sender !is Player) {
+                sender.sendMessage(Text.pre("&cVain pelaajat voivat käyttää tätä komentoa!"))
+                return@setExecutor true
+            }
+
+            if (args.size != 1) {
+                sender.sendMessage(Text.pre("&cKäytä: /acbar <bitcount>"))
+                return@setExecutor true
+            }
+
+            val bitcount = args[0].toIntOrNull()
+
+            if (bitcount == null) {
+                sender.sendMessage(Text.pre("&cKäytä: /acbar <bitcount>"))
+                return@setExecutor true
+            }
+
+            sendActionbar(sender, bitcount)
 
             true
         }
@@ -84,22 +157,30 @@ class Endihub : JavaPlugin(), Listener {
 
         event.player.gameMode = org.bukkit.GameMode.ADVENTURE
 
-        val compassItem = ItemStack(Material.ENDER_PEARL, 1)
-        compassItem.lore(List(1) { Text.md("&7Testaa ja nauti!")})
-        compassItem.amount = 99
-        compassItem.itemMeta.displayName(Text.md("&(primary-1)Ender Pearl"))
+        val pearlItem = ItemStack(Material.ENDER_PEARL, 1)
 
-        event.player.inventory.setItem(1, compassItem)
+        event.player.inventory.setItem(1, pearlItem)
 
         val cosmeticsItem = ItemStack(Material.ENDER_CHEST, 1)
-        cosmeticsItem.lore(List(1) { Text.md("&e**ᴘʀɪɢʜᴛᴄʟɪᴄᴋ**: Avaa kosmeettikka valikko")})
+        cosmeticsItem.lore(List(1) { Text.md("&e**ᴘʀɪɢʜᴛᴄʟɪᴄᴋ**: Avaa kosmeettikka valikko") })
         cosmeticsItem.itemMeta.displayName(Text.md("&(primary-1)Kosmeettikka"))
         event.player.inventory.setItem(4, cosmeticsItem)
 
-        event.player.inventory.setItem(7, compassItem)
+        event.player.inventory.setItem(7, pearlItem)
+
+        // send player a bossbar
+        Bukkit.createBossBar(
+            Text.mdlegacy("&#4e5c24&ꑉ"),
+            org.bukkit.boss.BarColor.WHITE,
+            org.bukkit.boss.BarStyle.SOLID
+        ).apply {
+            addPlayer(event.player)
+            isVisible = true
+            progress = 0.0
+        }
     }
 
-    @EventHandler
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @EventHandler
     fun onEntityDamage(event: EntityDamageEvent) {
         event.isCancelled = true
     }
@@ -115,6 +196,24 @@ class Endihub : JavaPlugin(), Listener {
         ) {
             event.player.fallDistance = 0F
             event.player.teleport(event.player.world.spawnLocation)
+        }
+    }
+
+    @EventHandler
+    fun onEntityMoveEvent(event: EntityMoveEvent) {
+        if (event.entity.passengers.size == 0) return
+        if (event.entity.passengers[0] !is Player) return
+        val player = event.entity.passengers[0] as Player
+
+        if (event.entity.location.x > config.getInt("x") ||
+            event.entity.location.x < -config.getInt("x") ||
+            event.entity.location.y > config.getInt("maxy") ||
+            event.entity.location.y < config.getInt("miny") ||
+            event.entity.location.z > config.getInt("z") ||
+            event.entity.location.z < -config.getInt("z")
+        ) {
+            event.entity.fallDistance = 0F
+            event.entity.teleport(player.world.spawnLocation)
         }
     }
 
@@ -173,18 +272,22 @@ class Endihub : JavaPlugin(), Listener {
     @EventHandler
     fun onPlayerProjectileThrowEvent(event: ProjectileLaunchEvent) {
         val shooter = event.entity.shooter
-        if (shooter is org.bukkit.entity.Player) {
-            if (event.entity.type == org.bukkit.entity.EntityType.ENDER_PEARL) {
-                shooter.inventory.setItemInMainHand(shooter.inventory.itemInMainHand.asQuantity(99))
-                event.entity.addPassenger(shooter)
-                shooter.sendMessage("§dWooosshh!")
-            }
+        if (shooter !is Player) return
+        if (event.entity.type != org.bukkit.entity.EntityType.ENDER_PEARL) return
+
+        if (playerPearls[shooter] != null) {
+            playerPearls[shooter]?.remove()
         }
 
+        shooter.inventory.setItemInMainHand(ItemStack(Material.ENDER_PEARL, 1))
+        event.entity.addPassenger(shooter)
+        playerPearls[shooter] = event.entity as EnderPearl
     }
 
-    override fun onDisable() {
-        // Plugin shutdown logic
+    @EventHandler
+    fun onEntityDismountEvent(event: EntityDismountEvent) {
+        event.dismounted.remove()
+        playerPearls.remove(event.entity)
     }
 
 }

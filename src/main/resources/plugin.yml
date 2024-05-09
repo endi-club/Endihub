@@ -9,3 +9,9 @@ commands:
     aliases: [survi]
     permission: endihub.survival
     usage: /survival
+
+  acbar:
+    description: Acbar server
+    aliases: [ac]
+    permission: endihub.acbar
+    usage: /acbar <int>
