@@ -224,6 +224,11 @@ class Endihub : JavaPlugin(), Listener {
     }
 
     @EventHandler
+    fun onPlayerpickupItemEvent(event: PlayerPickupItemEvent) {
+        event.isCancelled = !event.player.hasPermission("endihub.build")
+    }
+
+    @EventHandler
     fun onBlockBreakEvent(event: BlockBreakEvent) {
         event.isCancelled = !event.player.hasPermission("endihub.build")
     }
@@ -240,12 +245,12 @@ class Endihub : JavaPlugin(), Listener {
 
     @EventHandler
     fun onPlayerDropItemEvent(event: PlayerDropItemEvent) {
-        event.isCancelled = true
+        event.isCancelled = !event.player.hasPermission("endihub.build")
     }
 
     @EventHandler
     fun onPlayerSwapHandItemsEvent(event: PlayerSwapHandItemsEvent) {
-        event.isCancelled = true
+        event.isCancelled = !event.player.hasPermission("endihub.build")
     }
 
     // rightclick handler
