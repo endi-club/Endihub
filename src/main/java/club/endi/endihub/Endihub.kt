@@ -171,7 +171,7 @@ class Endihub : JavaPlugin(), Listener {
         // send player a bossbar
         Bukkit.createBossBar(
             Text.mdlegacy("&#4e5c24&ꑉ"),
-            org.bukkit.boss.BarColor.WHITE,
+            org.bukkit.boss.BarColor.YELLOW,
             org.bukkit.boss.BarStyle.SOLID
         ).apply {
             addPlayer(event.player)
