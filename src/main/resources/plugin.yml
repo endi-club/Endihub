@@ -15,3 +15,8 @@ commands:
     aliases: [ac]
     permission: endihub.acbar
     usage: /acbar <int>
+
+  setupserver:
+    description: Setup server
+    permission: endihub.setupserver
+    usage: /setupserver <server>
